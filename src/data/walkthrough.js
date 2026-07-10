@@ -20,7 +20,7 @@ export const NODES = {
     caption: 'Pull up to the Luxe Club. Valet, showroom, and your gate code.',
     pano: '/assets/pano/arrival.jpg',
     links: [
-      { to: 'gate', label: 'Through the gate', kind: 'move', yaw: 0.9, pitch: -0.12 },
+      { to: 'gate', label: 'Through the gate', kind: 'move', yaw: 0.9, pitch: -0.12, faceYaw: 3.14 },
       { to: 'aerial', label: 'See it from above', kind: 'up', yaw: -1.8, pitch: 0.35 },
     ],
   },
