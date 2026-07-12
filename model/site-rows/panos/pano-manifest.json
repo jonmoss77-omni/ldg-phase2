@@ -1,0 +1,27 @@
+{
+  "status": "geometry-locked panorama bases, not buyer-facing",
+  "projection": "equirectangular 360 x 180",
+  "dimensions_px": [4096, 2048],
+  "source_geometry": "../ldg-phase2-detailed-rows.obj",
+  "nodes": {
+    "mid-campus": {
+      "world_position_ft": [-95, 7.2, -80],
+      "file": "mid-campus-geometry.jpg",
+      "wrap_edge_mean_absolute_error": 0.183
+    },
+    "north-turnaround": {
+      "world_position_ft": [-95, 7.2, -330],
+      "file": "north-turnaround-geometry.jpg",
+      "wrap_edge_mean_absolute_error": 0.304
+    }
+  },
+  "workflow": "six 1024 px cubemap faces rendered from the exact Three.js model, then converted to 4K equirectangular images",
+  "not_final": [
+    "materials",
+    "landscape",
+    "sky",
+    "vehicles",
+    "signage",
+    "editorial lighting"
+  ]
+}
