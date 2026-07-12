@@ -1,0 +1,51 @@
+{
+  "status": "geometry validation checkpoint",
+  "coordinate_system": "feet; center shared wall x=0; center unit-row south face y=0",
+  "unit_count": 75,
+  "locked": {
+    "site_plan": "2026.05.04 Site Plan.pdf",
+    "unit_numbering": "New_Site_Plan.jpg",
+    "unit_dimensions": {
+      "signature": {
+        "width_ft": 28.0,
+        "depth_ft": 60.0
+      },
+      "deluxe": {
+        "width_ft": 28.0,
+        "depth_ft": 50.0
+      },
+      "premier": {
+        "width_ft": 20.0,
+        "depth_ft": 45.0
+      },
+      "standard": {
+        "width_ft": 28.0,
+        "depth_ft": 30.0
+      }
+    },
+    "shell_height_ft": 22.0,
+    "garage_door_height_ft": 14.0,
+    "mezzanine_floor_height_ft": 12.0,
+    "pedestrian_door_location": "consistent; exact modeled opening deferred",
+    "facade_direction": "EMPAD conceptual package"
+  },
+  "parameterized": {
+    "garage_door_width_ft": null,
+    "mezzanine_depth_options_ft": [
+      16,
+      28
+    ],
+    "premier_mezzanine_width": "limited to the 20 ft shell width",
+    "amenity_interiors": null,
+    "amenity_heights": "provisional massing",
+    "site_grading": "level provisional surface"
+  },
+  "outputs": [
+    "model/ldg-phase2-site-blockout.obj",
+    "model/ldg-garage-condo-shells.obj",
+    "docs/model-validation/site-plan-validation.svg",
+    "docs/model-validation/site-source-overlay.png",
+    "docs/model-validation/site-isometric-validation.png",
+    "docs/model-validation/unit-section-validation.svg"
+  ]
+}

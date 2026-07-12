@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 1800 1160">
+<rect width="100%" height="100%" fill="#131110"/>
+<text x="70" y="54" fill="#c58b4e" font-family="Arial" font-size="24" font-weight="700" letter-spacing="3">GARAGE CONDO SHELL VALIDATION</text>
+<text x="70" y="82" fill="#aaa096" font-family="Arial" font-size="13">Locked: 22 ft shell, 14 ft door height, 12 ft mezzanine floor. Garage door width remains TBD.</text>
+<rect x="70" y="130" width="780" height="430" rx="8" fill="#1c1916" stroke="#52483f"/>
+<text x="94" y="166" fill="#f4efe7" font-family="Arial" font-size="19" font-weight="700">Standard  28 x 30 FT</text>
+<rect x="104" y="326.0" width="240.0" height="176.0" fill="#f4efe7" fill-opacity="0.06" stroke="#d8d0c1" stroke-width="2"/>
+<line x1="104" y1="390.0" x2="139" y2="390.0" stroke="#c58b4e" stroke-width="3"/>
+<text x="111" y="381.0" fill="#d5a16a" font-family="Arial" font-size="10">14 FT DOOR HEIGHT</text>
+<rect x="216.0" y="403.0" width="128.0" height="6" fill="#c58b4e"/>
+<rect x="120.0" y="403.0" width="96.0" height="6" fill="#806044" stroke="#c58b4e" stroke-dasharray="7 5"/>
+<text x="339.0" y="424.0" text-anchor="end" fill="#d5a16a" font-family="Arial" font-size="10">16 FT MEZZ + 12 FT OPTION</text>
+<line x1="88" y1="502" x2="88" y2="326.0" stroke="#9b9288"/>
+<text x="81" y="414.0" transform="rotate(-90 81 414.0)" text-anchor="middle" fill="#f4efe7" font-family="Arial" font-size="11">22 FT</text>
+<line x1="104" y1="516" x2="344.0" y2="516" stroke="#9b9288"/>
+<text x="224.0" y="534" text-anchor="middle" fill="#f4efe7" font-family="Arial" font-size="11">30 FT DEPTH</text>
+<text x="822" y="208" text-anchor="end" fill="#aaa096" font-family="Arial" font-size="12">FRONTAGE 28 FT</text>
+<text x="822" y="228" text-anchor="end" fill="#aaa096" font-family="Arial" font-size="12">DOOR WIDTH TBD</text>
+<rect x="930" y="130" width="780" height="430" rx="8" fill="#1c1916" stroke="#52483f"/>
+<text x="954" y="166" fill="#f4efe7" font-family="Arial" font-size="19" font-weight="700">Premier  20 x 45 FT</text>
+<rect x="964" y="326.0" width="360.0" height="176.0" fill="#f4efe7" fill-opacity="0.06" stroke="#d8d0c1" stroke-width="2"/>
+<line x1="964" y1="390.0" x2="999" y2="390.0" stroke="#c58b4e" stroke-width="3"/>
+<text x="971" y="381.0" fill="#d5a16a" font-family="Arial" font-size="10">14 FT DOOR HEIGHT</text>
+<rect x="1196.0" y="403.0" width="128.0" height="6" fill="#c58b4e"/>
+<rect x="1100.0" y="403.0" width="96.0" height="6" fill="#806044" stroke="#c58b4e" stroke-dasharray="7 5"/>
+<text x="1319.0" y="424.0" text-anchor="end" fill="#d5a16a" font-family="Arial" font-size="10">16 FT MEZZ + 12 FT OPTION</text>
+<line x1="948" y1="502" x2="948" y2="326.0" stroke="#9b9288"/>
+<text x="941" y="414.0" transform="rotate(-90 941 414.0)" text-anchor="middle" fill="#f4efe7" font-family="Arial" font-size="11">22 FT</text>
+<line x1="964" y1="516" x2="1324.0" y2="516" stroke="#9b9288"/>
+<text x="1144.0" y="534" text-anchor="middle" fill="#f4efe7" font-family="Arial" font-size="11">45 FT DEPTH</text>
+<text x="1682" y="208" text-anchor="end" fill="#aaa096" font-family="Arial" font-size="12">FRONTAGE 20 FT</text>
+<text x="1682" y="228" text-anchor="end" fill="#aaa096" font-family="Arial" font-size="12">DOOR WIDTH TBD</text>
+<rect x="70" y="650" width="780" height="430" rx="8" fill="#1c1916" stroke="#52483f"/>
+<text x="94" y="686" fill="#f4efe7" font-family="Arial" font-size="19" font-weight="700">Deluxe  28 x 50 FT</text>
+<rect x="104" y="846.0" width="400.0" height="176.0" fill="#f4efe7" fill-opacity="0.06" stroke="#d8d0c1" stroke-width="2"/>
+<line x1="104" y1="910.0" x2="139" y2="910.0" stroke="#c58b4e" stroke-width="3"/>
+<text x="111" y="901.0" fill="#d5a16a" font-family="Arial" font-size="10">14 FT DOOR HEIGHT</text>
+<rect x="376.0" y="923.0" width="128.0" height="6" fill="#c58b4e"/>
+<rect x="280.0" y="923.0" width="96.0" height="6" fill="#806044" stroke="#c58b4e" stroke-dasharray="7 5"/>
+<text x="499.0" y="944.0" text-anchor="end" fill="#d5a16a" font-family="Arial" font-size="10">16 FT MEZZ + 12 FT OPTION</text>
+<line x1="88" y1="1022" x2="88" y2="846.0" stroke="#9b9288"/>
+<text x="81" y="934.0" transform="rotate(-90 81 934.0)" text-anchor="middle" fill="#f4efe7" font-family="Arial" font-size="11">22 FT</text>
+<line x1="104" y1="1036" x2="504.0" y2="1036" stroke="#9b9288"/>
+<text x="304.0" y="1054" text-anchor="middle" fill="#f4efe7" font-family="Arial" font-size="11">50 FT DEPTH</text>
+<text x="822" y="728" text-anchor="end" fill="#aaa096" font-family="Arial" font-size="12">FRONTAGE 28 FT</text>
+<text x="822" y="748" text-anchor="end" fill="#aaa096" font-family="Arial" font-size="12">DOOR WIDTH TBD</text>
+<rect x="930" y="650" width="780" height="430" rx="8" fill="#1c1916" stroke="#52483f"/>
+<text x="954" y="686" fill="#f4efe7" font-family="Arial" font-size="19" font-weight="700">Signature  28 x 60 FT</text>
+<rect x="964" y="846.0" width="480.0" height="176.0" fill="#f4efe7" fill-opacity="0.06" stroke="#d8d0c1" stroke-width="2"/>
+<line x1="964" y1="910.0" x2="999" y2="910.0" stroke="#c58b4e" stroke-width="3"/>
+<text x="971" y="901.0" fill="#d5a16a" font-family="Arial" font-size="10">14 FT DOOR HEIGHT</text>
+<rect x="1316.0" y="923.0" width="128.0" height="6" fill="#c58b4e"/>
+<rect x="1220.0" y="923.0" width="96.0" height="6" fill="#806044" stroke="#c58b4e" stroke-dasharray="7 5"/>
+<text x="1439.0" y="944.0" text-anchor="end" fill="#d5a16a" font-family="Arial" font-size="10">16 FT MEZZ + 12 FT OPTION</text>
+<line x1="948" y1="1022" x2="948" y2="846.0" stroke="#9b9288"/>
+<text x="941" y="934.0" transform="rotate(-90 941 934.0)" text-anchor="middle" fill="#f4efe7" font-family="Arial" font-size="11">22 FT</text>
+<line x1="964" y1="1036" x2="1444.0" y2="1036" stroke="#9b9288"/>
+<text x="1204.0" y="1054" text-anchor="middle" fill="#f4efe7" font-family="Arial" font-size="11">60 FT DEPTH</text>
+<text x="1682" y="728" text-anchor="end" fill="#aaa096" font-family="Arial" font-size="12">FRONTAGE 28 FT</text>
+<text x="1682" y="748" text-anchor="end" fill="#aaa096" font-family="Arial" font-size="12">DOOR WIDTH TBD</text>
+</svg>

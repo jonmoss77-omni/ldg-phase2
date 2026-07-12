@@ -1,0 +1,43 @@
+newmtl signature
+Kd 0.8157 0.5882 0.3490
+Ka 0.05 0.05 0.05
+
+newmtl deluxe
+Kd 0.6118 0.7647 0.8510
+Ka 0.05 0.05 0.05
+
+newmtl premier
+Kd 0.6627 0.8235 0.6510
+Ka 0.05 0.05 0.05
+
+newmtl standard
+Kd 0.8471 0.8157 0.7569
+Ka 0.05 0.05 0.05
+
+newmtl club
+Kd 0.7725 0.5451 0.3059
+Ka 0.05 0.05 0.05
+
+newmtl gallery
+Kd 0.4392 0.3922 0.3451
+Ka 0.05 0.05 0.05
+
+newmtl amenity
+Kd 0.5373 0.4745 0.4118
+Ka 0.05 0.05 0.05
+
+newmtl ground
+Kd 0.1647 0.1529 0.1412
+Ka 0.05 0.05 0.05
+
+newmtl shell
+Kd 0.86 0.84 0.79
+Ka 0.05 0.05 0.05
+
+newmtl optional_mezzanine
+Kd 0.77 0.55 0.31
+d 0.65
+
+newmtl optional_extension
+Kd 0.55 0.40 0.28
+d 0.45
