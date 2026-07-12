@@ -1,0 +1,24 @@
+{
+  "status": "complete garage-condo row geometry checkpoint, not buyer-facing",
+  "unit_count": 75,
+  "type_counts": {
+    "signature": 13,
+    "deluxe": 27,
+    "premier": 18,
+    "standard": 17
+  },
+  "confirmed": {
+    "footprints_and_numbering": true,
+    "shell_height_ft": 22.0,
+    "garage_door_height_ft": 14.0,
+    "site_row_geometry": "calibrated to authoritative site plan",
+    "facade_direction": "EMPAD conceptual package dated 2025-10-29"
+  },
+  "provisional": {
+    "garage_opening_widths": "18/28 frontage ratio",
+    "pedestrian_door_widths_and_positions": "scaled facade study",
+    "facade_subdivisions_materials_structure_landscape": "conceptual",
+    "amenity_masses": true,
+    "site_grading": "level"
+  }
+}
