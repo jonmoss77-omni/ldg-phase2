@@ -1,0 +1,46 @@
+{
+  "status": "Deluxe geometry and photoreal buyer candidate complete; local only",
+  "projection": "equirectangular 360 x 180",
+  "dimensions_px": [4096, 2048],
+  "camera_world_position_ft": [14, 5.5, -8],
+  "geometry_file": "deluxe-interior-geometry.jpg",
+  "geometry_wrap_edge_mean_absolute_error": {
+    "1px_band": 0.0,
+    "8px_band": 0.0
+  },
+  "confirmed_geometry": {
+    "shell_ft": [28, 50, 22],
+    "garage_door_width_ft": 12,
+    "garage_door_height_ft": 14,
+    "mezzanine_floor_height_ft": 12,
+    "mezzanine_clearance_ft": 10.5,
+    "mezzanine_depth_ft": 16,
+    "stair_width_ft": 4.6666666667,
+    "restroom_envelope_ft": [10, 9.3333333333]
+  },
+  "photoreal_candidate": {
+    "file": "deluxe-interior-photoreal-higgsfield-v1-seam8.jpg",
+    "buyer_walkthrough_file": "../../../public/assets/pano/deluxe.jpg",
+    "higgsfield_job_id": "97cc8ad0-1388-4d3d-a49b-6c773f24a65f",
+    "model": "gpt_image_2",
+    "requested_output": "4K, high quality, 16:9",
+    "downloaded_dimensions_px": [3840, 2160],
+    "walkthrough_dimensions_px": [4096, 2048],
+    "wrap_edge_mean_absolute_error_before_heal": {
+      "1px_band": 3.95,
+      "8px_band": 3.813
+    },
+    "wrap_edge_mean_absolute_error_after_8px_heal": {
+      "1px_band": 0.821,
+      "8px_band": 2.167
+    },
+    "fit_out_status": "artist impression of one possible owner fit-out",
+    "validation": "Passed seam-centered visual inspection, desktop buyer-context inspection, return-route interaction, and 390 x 844 phone-layout inspection"
+  },
+  "provisional": [
+    "pedestrian door width and position",
+    "stair run and tread geometry",
+    "structural system and materials",
+    "hospitality cabinetry, furniture, vehicles, lighting, and finishes"
+  ]
+}

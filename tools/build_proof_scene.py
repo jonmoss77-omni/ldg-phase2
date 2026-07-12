@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Build the EMPAD-led Deluxe garage-condo proof scene.
 
-Confirmed dimensions drive the shell and interior planning. Facade opening
-widths are proportional studies from the conceptual package and remain named
-as provisional geometry in both the model and manifest.
+Confirmed dimensions drive the shell and interior planning. The garage-door
+width is confirmed; pedestrian-door size and facade opening positions remain
+proportional studies named as provisional geometry in the manifest.
 """
 
 from __future__ import annotations
@@ -24,12 +24,11 @@ DEPTH = 50.0
 HEIGHT = 22.0
 GARAGE_DOOR_HEIGHT = 14.0
 MEZZANINE_HEIGHT = 12.0
+MEZZANINE_CLEARANCE = 10.5
 MEZZANINE_DEPTH = 16.0
 STAIR_WIDTH = 4.0 + 8.0 / 12.0
 
-# Proportional facade study only. Width is intentionally not classified as
-# confirmed until an elevation or door schedule is supplied.
-GARAGE_OPENING_WIDTH_PROVISIONAL = 18.0
+GARAGE_OPENING_WIDTH = 12.0
 PEDESTRIAN_DOOR_WIDTH_PROVISIONAL = 3.5
 
 
@@ -80,7 +79,7 @@ def add_door_grid(writer, prefix, x0, x1, y, z0=0.3, z1=14.0):
 def add_facade(writer, x0, prefix, proof=False):
     x1 = x0 + WIDTH
     opening_x0 = x0 + 0.8
-    opening_x1 = opening_x0 + GARAGE_OPENING_WIDTH_PROVISIONAL
+    opening_x1 = opening_x0 + GARAGE_OPENING_WIDTH
     wood_x0 = x0 + 19.4
 
     box(writer, f"{prefix}_parapet", (x0, -0.45, 20.6, x1, 0.25, HEIGHT), "shell_white")
@@ -127,8 +126,9 @@ def add_proof_interior(writer, x0=0.0):
     x1 = x0 + WIDTH
     mezz_y0 = DEPTH - MEZZANINE_DEPTH
 
-    box(writer, f"{prefix}_mezzanine", (x0 + 0.5, mezz_y0, MEZZANINE_HEIGHT, x1 - 0.5, DEPTH - 0.5, MEZZANINE_HEIGHT + 0.5), "mezzanine")
-    box(writer, f"{prefix}_mezzanine_front_beam", (x0 + 0.5, mezz_y0 - 0.35, 11.35, x1 - 0.5, mezz_y0 + 0.15, 12.5), "metal")
+    box(writer, f"{prefix}_mezzanine_structure", (x0 + 0.5, mezz_y0, MEZZANINE_CLEARANCE, x1 - 0.5, DEPTH - 0.5, MEZZANINE_HEIGHT), "mezzanine")
+    box(writer, f"{prefix}_mezzanine_floor", (x0 + 0.5, mezz_y0, MEZZANINE_HEIGHT, x1 - 0.5, DEPTH - 0.5, MEZZANINE_HEIGHT + 0.25), "mezzanine")
+    box(writer, f"{prefix}_mezzanine_front_beam", (x0 + 0.5, mezz_y0 - 0.35, MEZZANINE_CLEARANCE, x1 - 0.5, mezz_y0 + 0.15, MEZZANINE_HEIGHT), "metal")
 
     # Open guardrail across the mezzanine edge.
     box(writer, f"{prefix}_rail_top", (x0 + 0.6, mezz_y0 - 0.2, 15.2, x1 - 0.6, mezz_y0 + 0.05, 15.45), "metal")
@@ -184,15 +184,16 @@ def build():
         "selected_type": "Deluxe garage condo",
         "confirmed": {
             "shell_ft": [WIDTH, DEPTH, HEIGHT],
+            "garage_door_width_ft": GARAGE_OPENING_WIDTH,
             "garage_door_height_ft": GARAGE_DOOR_HEIGHT,
             "mezzanine_floor_height_ft": MEZZANINE_HEIGHT,
+            "mezzanine_clearance_ft": MEZZANINE_CLEARANCE,
             "mezzanine_depth_ft": MEZZANINE_DEPTH,
             "stair_width_ft": STAIR_WIDTH,
             "restroom_envelope_ft": [10.0, 9.0 + 4.0 / 12.0],
             "facade_direction": "EMPAD conceptual package dated 2025-10-29",
         },
         "provisional": {
-            "garage_opening_width_ft": GARAGE_OPENING_WIDTH_PROVISIONAL,
             "pedestrian_door_width_ft": PEDESTRIAN_DOOR_WIDTH_PROVISIONAL,
             "stair_run": "proportional to floor plan; section not supplied",
             "facade_opening_positions": "proportional to conceptual plan",
