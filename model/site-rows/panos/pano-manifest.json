@@ -1,5 +1,5 @@
 {
-  "status": "geometry-locked panorama bases, not buyer-facing",
+  "status": "geometry bases complete; mid-campus photoreal candidate integrated locally for buyer-context validation",
   "projection": "equirectangular 360 x 180",
   "dimensions_px": [4096, 2048],
   "source_geometry": "../ldg-phase2-detailed-rows.obj",
@@ -7,7 +7,25 @@
     "mid-campus": {
       "world_position_ft": [-95, 7.2, -80],
       "file": "mid-campus-geometry.jpg",
-      "wrap_edge_mean_absolute_error": 0.183
+      "wrap_edge_mean_absolute_error": 0.183,
+      "photoreal_candidate": {
+        "file": "mid-campus-photoreal-higgsfield-v1-healed.jpg",
+        "buyer_walkthrough_file": "../../../public/assets/pano/drive-mid.jpg",
+        "higgsfield_job_id": "fc5dbcd6-d915-407c-9dd7-b1dcf0b23b82",
+        "model": "gpt_image_2",
+        "requested_output": "4K, high quality, 16:9",
+        "downloaded_dimensions_px": [3840, 2160],
+        "walkthrough_dimensions_px": [4096, 2048],
+        "wrap_edge_mean_absolute_error_before_heal": {
+          "1px_band": 8.746,
+          "8px_band": 9.602
+        },
+        "wrap_edge_mean_absolute_error_after_heal": {
+          "1px_band": 0.807,
+          "8px_band": 0.902
+        },
+        "validation": "passed desktop 360, seam crossing, northbound hotspot route, and 390 x 844 responsive layout; local only"
+      }
     },
     "north-turnaround": {
       "world_position_ft": [-95, 7.2, -330],
@@ -17,11 +35,10 @@
   },
   "workflow": "six 1024 px cubemap faces rendered from the exact Three.js model, then converted to 4K equirectangular images",
   "not_final": [
-    "materials",
-    "landscape",
-    "sky",
-    "vehicles",
-    "signage",
-    "editorial lighting"
+    "facade opening positions and garage-door widths",
+    "architectural materials pending final renderings",
+    "site signage",
+    "amenity architecture",
+    "remaining walkthrough nodes"
   ]
 }

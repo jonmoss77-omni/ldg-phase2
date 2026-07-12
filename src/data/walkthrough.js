@@ -52,8 +52,8 @@ export const NODES = {
     caption: 'Wide aisles, guest bays, and neighbors who wave with a torque wrench.',
     pano: '/assets/pano/drive-mid.jpg',
     links: [
-      { to: 'driveNorth', label: 'Continue to the north end', kind: 'move', yaw: 3.14, pitch: -0.14, faceYaw: 3.14 },
-      { to: 'driveSouth', label: 'Back south', kind: 'back', yaw: 0.3, pitch: -0.06 },
+      { to: 'driveNorth', label: 'Continue to the north end', kind: 'move', yaw: 0, pitch: -0.14, faceYaw: 0 },
+      { to: 'driveSouth', label: 'Back south', kind: 'back', yaw: 3.14, pitch: -0.06 },
       { to: 'premier', label: 'Enter a Premier', kind: 'enter', yaw: -1.45, pitch: -0.05 },
     ],
   },

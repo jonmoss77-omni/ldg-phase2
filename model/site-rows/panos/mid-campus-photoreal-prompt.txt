@@ -1,0 +1,27 @@
+Use case: sketch-to-render
+Asset type: production photorealistic equirectangular 360 panorama for a luxury garage condo investor presentation
+
+Primary request:
+Create the production-resolution photoreal finish of Image 1. Image 1 is the absolute authority for geometry, camera position, projection, composition, architecture, and roadway. Image 2 is the approved appearance target. Images 3 and 4 are approved EMPAD facade and material references only.
+
+Projection and geometry invariants:
+- Preserve Image 1's exact 2:1 equirectangular 360 x 180 projection.
+- Preserve its exact horizon, camera height, road width, vanishing directions, building positions, rooflines, facade curvature, unit spacing, garage-door count, pedestrian-door count, louver count and placement, canopy placement, and every visible architectural edge.
+- Preserve the equirectangular distortion. Do not make this a normal wide-angle photograph.
+- The left and right edges are the same physical direction and must join perfectly. Match all sky, pavement, buildings, light, color, shadows, landscaping, and texture across that boundary.
+- Do not place a vehicle, tree, planter, door edge, shadow edge, or other high-frequency object across the left-right wrap boundary.
+
+Finished scene:
+A completed-development artist impression of Luxe Dream Garage Waterside Phase 2 in Sarasota, Florida, showing what will exist. Bright, even, natural Florida daylight. Pale blue sky with restrained soft clouds. Soft realistic shadows. Clean warm-gray paved drive.
+
+Approved facade treatment:
+Smooth warm-white architectural panels, approved warm vertical timber cladding, charcoal sectional garage doors, charcoal upper louvers, dark brushed-metal pedestrian canopies, dark glazing, restrained bougainvillea and low architectural planters. Follow the material character of Images 2, 3 and 4 without copying their camera angles or changing Image 1's architecture.
+
+Lifestyle layer:
+Add only four or five correctly scaled premium collector vehicles, parked intermittently and positioned so no important architectural detail is hidden. No crowds. At most two subtle people in the full panorama. Keep the center drive open and navigable.
+
+Quality:
+Highly realistic architectural visualization with Architectural Digest and Robb Report editorial finish. Natural materials, fine surface texture, physically plausible scale and lighting. This is a polished artist impression, not stylized AI art.
+
+Hard constraints:
+Change surface realism, landscaping, sky, daylight, and sparse lifestyle objects only. Do not add, remove, widen, narrow, bend, relocate, restyle, or redesign any building, garage condo, garage door, pedestrian door, louver bay, canopy, facade pier, roofline, or roadway. Do not invent signage, logos, unit numbers, or text. No construction equipment, unfinished work, workers, sunset, dramatic lighting, wet pavement, excessive reflections, distorted cars, duplicated cars, watermark, crop, black borders, or visible panorama seam.
