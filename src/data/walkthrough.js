@@ -64,7 +64,7 @@ export const NODES = {
     pano: '/assets/pano/drive-north.jpg',
     links: [
       { to: 'standard', label: 'Enter a Standard', kind: 'enter', yaw: -1.45, pitch: -0.05 },
-      { to: 'driveMid', label: 'Head back south', kind: 'move', yaw: 0, pitch: -0.14 },
+      { to: 'driveMid', label: 'Head back south', kind: 'move', yaw: 3.14, pitch: -0.14, faceYaw: 3.14 },
       { to: 'arrival', label: 'Loop back to arrival', kind: 'back', yaw: 0.7, pitch: -0.04 },
     ],
   },

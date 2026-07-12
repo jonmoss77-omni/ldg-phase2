@@ -4,6 +4,7 @@ const sources = {
   mid: './panos/mid-campus-geometry.jpg',
   photoreal: './panos/mid-campus-photoreal-higgsfield-v1-healed.jpg',
   north: './panos/north-turnaround-geometry.jpg',
+  northPhotoreal: './panos/north-turnaround-photoreal-higgsfield-v1-seam8.jpg',
 };
 
 const viewer = new Viewer({

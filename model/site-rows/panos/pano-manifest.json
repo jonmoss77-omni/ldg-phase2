@@ -1,5 +1,5 @@
 {
-  "status": "geometry bases complete; mid-campus photoreal candidate integrated locally for buyer-context validation",
+  "status": "geometry bases complete; mid-campus and north-turnaround photoreal candidates integrated locally for buyer-context validation",
   "projection": "equirectangular 360 x 180",
   "dimensions_px": [4096, 2048],
   "source_geometry": "../ldg-phase2-detailed-rows.obj",
@@ -30,7 +30,26 @@
     "north-turnaround": {
       "world_position_ft": [-95, 7.2, -330],
       "file": "north-turnaround-geometry.jpg",
-      "wrap_edge_mean_absolute_error": 0.304
+      "wrap_edge_mean_absolute_error": 0.304,
+      "photoreal_candidate": {
+        "file": "north-turnaround-photoreal-higgsfield-v1-seam8.jpg",
+        "buyer_walkthrough_file": "../../../public/assets/pano/drive-north.jpg",
+        "higgsfield_job_id": "3b5e4ec8-2922-40b8-b4cb-bcdfa8b098bf",
+        "model": "gpt_image_2",
+        "requested_output": "4K, high quality, 16:9",
+        "downloaded_dimensions_px": [3840, 2160],
+        "walkthrough_dimensions_px": [4096, 2048],
+        "wrap_edge_mean_absolute_error_before_heal": {
+          "1px_band": 15.333,
+          "8px_band": 19.474
+        },
+        "wrap_edge_mean_absolute_error_after_8px_heal": {
+          "1px_band": 1.637,
+          "8px_band": 10.340
+        },
+        "rejected_method": "128px edge blend produced visible ghosted palms and roadway in the 360 viewer",
+        "validation": "passed isolated desktop 360, forward view, visual seam crossing, buyer-context Head back south route, Standard entry route, 390 x 844 responsive layout, and clean browser logs; local only"
+      }
     }
   },
   "workflow": "six 1024 px cubemap faces rendered from the exact Three.js model, then converted to 4K equirectangular images",
