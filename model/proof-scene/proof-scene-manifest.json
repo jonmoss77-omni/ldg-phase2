@@ -1,0 +1,31 @@
+{
+  "status": "representative geometry proof, not buyer-facing",
+  "selected_type": "Deluxe garage condo",
+  "confirmed": {
+    "shell_ft": [
+      28.0,
+      50.0,
+      22.0
+    ],
+    "garage_door_height_ft": 14.0,
+    "mezzanine_floor_height_ft": 12.0,
+    "mezzanine_depth_ft": 16.0,
+    "stair_width_ft": 4.666666666666667,
+    "restroom_envelope_ft": [
+      10.0,
+      9.333333333333334
+    ],
+    "facade_direction": "EMPAD conceptual package dated 2025-10-29"
+  },
+  "provisional": {
+    "garage_opening_width_ft": 18.0,
+    "pedestrian_door_width_ft": 3.5,
+    "stair_run": "proportional to floor plan; section not supplied",
+    "facade_opening_positions": "proportional to conceptual plan",
+    "structure_materials_landscape": "visual study only"
+  },
+  "sources": [
+    "assets/Phase 2 Site Plans/2025.10.29 LUXE Dream Garage - EMPAD Conceptuals_Optimized.pdf",
+    "assets/Phase 2 Unit Floor Plans/CONDO GARAGE TYPES 2.pdf, page 1"
+  ]
+}
