@@ -30,7 +30,7 @@ export const NODES = {
     caption: 'The doors open for owners and their guests. Nobody else.',
     pano: '/assets/pano/gate.jpg',
     links: [
-      { to: 'driveSouth', label: 'Onto the drive', kind: 'move', yaw: 3.14, pitch: -0.14, faceYaw: 3.14 },
+      { to: 'driveSouth', label: 'Onto the drive', kind: 'move', yaw: 3.14, pitch: -0.14, faceYaw: 0 },
       { to: 'arrival', label: 'Back to arrival', kind: 'back', yaw: 0.35, pitch: -0.06 },
     ],
   },
@@ -40,8 +40,8 @@ export const NODES = {
     caption: 'Every door on this street is a private collection. Yours starts here.',
     pano: '/assets/pano/drive-south.jpg',
     links: [
-      { to: 'driveMid', label: 'Continue north', kind: 'move', yaw: 3.14, pitch: -0.14, faceYaw: 3.14 },
-      { to: 'gate', label: 'Back to the gate', kind: 'back', yaw: 0.3, pitch: -0.06 },
+      { to: 'driveMid', label: 'Continue north', kind: 'move', yaw: 0, pitch: -0.14, faceYaw: 0 },
+      { to: 'gate', label: 'Back to the gate', kind: 'back', yaw: 3.14, pitch: -0.06 },
       { to: 'signature', label: 'Enter a Signature', kind: 'enter', yaw: -1.45, pitch: -0.05 },
       { to: 'deluxe', label: 'Enter a Deluxe', kind: 'enter', yaw: 1.45, pitch: -0.05 },
     ],

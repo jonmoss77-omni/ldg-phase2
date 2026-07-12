@@ -1,9 +1,36 @@
 {
-  "status": "geometry bases complete; mid-campus and north-turnaround photoreal candidates integrated locally for buyer-context validation",
+  "status": "geometry bases complete; Drive South, mid-campus, and north-turnaround photoreal candidates integrated locally for buyer-context validation",
   "projection": "equirectangular 360 x 180",
   "dimensions_px": [4096, 2048],
   "source_geometry": "../ldg-phase2-detailed-rows.obj",
   "nodes": {
+    "drive-south": {
+      "world_position_ft": [-95, 7.2, -40],
+      "file": "drive-south-geometry.jpg",
+      "wrap_edge_mean_absolute_error": {
+        "1px_band": 0.074,
+        "8px_band": 0.172
+      },
+      "photoreal_candidate": {
+        "file": "drive-south-photoreal-higgsfield-v1-seam8.jpg",
+        "buyer_walkthrough_file": "../../../public/assets/pano/drive-south.jpg",
+        "higgsfield_job_id": "c8d165bf-1970-4bff-a950-4857ab6c64b1",
+        "model": "gpt_image_2",
+        "requested_output": "4K, high quality, 16:9",
+        "downloaded_dimensions_px": [3840, 2160],
+        "walkthrough_dimensions_px": [4096, 2048],
+        "wrap_edge_mean_absolute_error_before_heal": {
+          "1px_band": 18.988,
+          "8px_band": 16.122
+        },
+        "wrap_edge_mean_absolute_error_after_8px_heal": {
+          "1px_band": 1.475,
+          "8px_band": 8.039
+        },
+        "provisional_view": "south-facing amenity masses retain exact model massing but use neutral walls and landscape screening because approved amenity architecture is unavailable",
+        "validation": "passed isolated desktop 360, forward view, visual seam crossing, buyer-context Continue north route, buyer-context Back to the gate route, 390 x 844 responsive layout, and clean browser logs; local only"
+      }
+    },
     "mid-campus": {
       "world_position_ft": [-95, 7.2, -80],
       "file": "mid-campus-geometry.jpg",

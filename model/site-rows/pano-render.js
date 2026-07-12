@@ -9,6 +9,7 @@ const faceName = params.get('face') || 'nz';
 const size = Math.max(512, Math.min(2048, Number(params.get('size')) || 1024));
 
 const nodes = {
+  south: new THREE.Vector3(-95, 7.2, -40),
   mid: new THREE.Vector3(-95, 7.2, -80),
   north: new THREE.Vector3(-95, 7.2, -330),
 };
@@ -75,6 +76,11 @@ new MTLLoader().setPath('./').load('ldg-phase2-detailed-rows.mtl', (materials) =
     mergedModel.rotation.x = -Math.PI / 2;
     scene.add(mergedModel);
     renderer.render(scene, camera);
+    const exportImage = document.createElement('img');
+    exportImage.id = 'render-export';
+    exportImage.hidden = true;
+    exportImage.src = renderer.domElement.toDataURL('image/png');
+    document.body.append(exportImage);
     document.body.classList.add('ready');
     document.body.dataset.node = nodeName;
     document.body.dataset.face = faceName;

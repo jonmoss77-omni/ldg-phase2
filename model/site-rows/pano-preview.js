@@ -1,6 +1,8 @@
 import { Viewer } from '/node_modules/@photo-sphere-viewer/core/index.module.js';
 
 const sources = {
+  south: './panos/drive-south-geometry.jpg',
+  southPhotoreal: './panos/drive-south-photoreal-higgsfield-v1-seam8.jpg',
   mid: './panos/mid-campus-geometry.jpg',
   photoreal: './panos/mid-campus-photoreal-higgsfield-v1-healed.jpg',
   north: './panos/north-turnaround-geometry.jpg',

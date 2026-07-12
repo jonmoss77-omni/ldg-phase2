@@ -1,0 +1,36 @@
+Use case: sketch-to-render
+Asset type: production photorealistic equirectangular 360 panorama for a luxury garage condo investor presentation
+
+Input images:
+- Image 1: exact Drive South geometry, camera, massing, and panorama authority.
+- Image 2: approved mid-campus panorama for facade, materials, daylight, paving, landscaping, and image-quality continuity.
+- Image 3: approved north-turnaround panorama for the same continuity requirements.
+- Image 4: authoritative Phase 2 facade and material reference.
+
+Primary request:
+Create the production-resolution photoreal finish of Image 1. Image 1 is the absolute authority for geometry, camera position, projection, composition, garage-condo rows, roadway, and all provisional amenity masses visible toward the southern side. Match Images 2 and 3 closely enough that this feels like the immediately adjacent Drive South position in one continuous completed campus.
+
+Projection and geometry invariants:
+- Preserve Image 1's exact 2:1 equirectangular 360 x 180 projection.
+- Preserve its exact horizon, camera height, roadway width, vanishing directions, building positions, massing, rooflines, facade curvature, unit spacing, garage-door count, pedestrian-door count, louver count and placement, canopy placement, and every visible architectural edge.
+- Preserve the equirectangular distortion. Do not make this a normal wide-angle photograph.
+- The left and right edges are the same physical direction and must join perfectly. Match sky, paving, buildings, light, color, shadows, landscaping, and texture across that boundary.
+- Keep the left-right wrap boundary low detail. Do not place a vehicle, person, tree trunk, planter edge, door edge, shadow edge, or other high-frequency object across it.
+
+Finished scene:
+A completed-development artist impression of Luxe Dream Garage Waterside Phase 2 in Sarasota, Florida, showing what will exist. Bright, even, natural Florida daylight matching Images 2 and 3. Pale blue sky with restrained soft clouds. Soft realistic shadows. Clean warm-gray paving.
+
+Approved garage-condo treatment:
+Smooth warm-white architectural panels, approved warm vertical timber cladding, charcoal sectional garage doors, charcoal upper louvers, dark brushed-metal pedestrian canopies, dark glazing, restrained bougainvillea, palms, and low architectural planters. Match Images 2 and 3 without changing Image 1's architecture.
+
+Provisional amenity-mass treatment:
+The plain masses visible when looking south are dimensionally positioned but their architecture is not approved. Preserve their exact size, position, and roofline. Finish them only as restrained warm-white and charcoal wall planes with dense low landscaping. Do not add doors, windows, signage, canopies, detailed facades, or new architectural features to those masses.
+
+Lifestyle layer:
+Add no more than three correctly scaled premium collector vehicles, parked intermittently and away from the panorama seam. No crowds. At most one subtle person. Keep the drive path visually open and navigable.
+
+Quality:
+Highly realistic architectural visualization with Architectural Digest and Robb Report editorial finish. Natural materials, fine surface texture, physically plausible scale and lighting. This is a polished artist impression, not stylized AI art.
+
+Hard constraints:
+Change surface realism, landscaping, sky, daylight, and sparse lifestyle objects only. Do not add, remove, widen, narrow, bend, relocate, restyle, or redesign any building, garage condo, garage door, pedestrian door, louver bay, canopy, facade pier, roofline, amenity mass, or roadway. Do not invent signage, logos, unit numbers, text, amenity doors, or amenity windows. No construction equipment, unfinished work, workers, sunset, dramatic lighting, wet pavement, excessive reflections, distorted cars, duplicated cars, watermark, crop, black borders, or visible panorama seam.
