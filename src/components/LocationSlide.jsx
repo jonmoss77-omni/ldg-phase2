@@ -2,22 +2,24 @@ import { useEffect, useRef, useState } from 'react';
 import { GMAPS_KEY as KEY } from '../config';
 import { visionAsset } from '../data/visionPoses';
 
-const SITE = { lat: 27.3787116, lng: -82.426444 };
+// Phase 2 campus center, locked by the approved site-plan alignment rather
+// than the postal-address geocode (which lands on the neighboring building).
+const SITE = { lat: 27.378, lng: -82.4269 };
 const ADDRESS = '7100 Professional Parkway East, Sarasota, FL 34240';
-// Default aerial vantage (Round 4): wide establishing view from the south,
-// whole corridor in frame with the parcel sitting just above center.
-const HOME = { lat: 27.3742, lng: -82.4262, height: 400, heading: 1, pitch: -38 };
-// Static photo of the HOME view: shown instantly under the live tiles and
-// faded out once the tileset has streamed in, and kept as the permanent
-// fallback if the tiles cannot load at all.
-const HOME_STILL = '/assets/aerial-home.jpg';
+// Canonical camera from the approved Round 3 before/after pair. Keeping the
+// live map, instant plate, and Vision image on this exact pose prevents the
+// development from appearing to jump to a different parcel.
+const HOME = { lat: 27.378844, lng: -82.421615, height: 200, heading: 257, pitch: -26 };
+const HOME_STILL = visionAsset('pose3', 'before');
+const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${SITE.lat},${SITE.lng}`;
+const STREET_URL = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=27.3785,-82.4245&heading=257&pitch=2&fov=80';
 
 let mapsPromise = null;
 function loadMaps() {
   if (mapsPromise) return mapsPromise;
   mapsPromise = new Promise((resolve, reject) => {
     const s = document.createElement('script');
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${KEY}&v=weekly`;
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${KEY}&v=weekly&loading=async`;
     s.async = true;
     s.onload = () => resolve(window.google);
     s.onerror = reject;
@@ -45,6 +47,7 @@ export default function LocationSlide({ mounted, near }) {
   const svInit = useRef(false);
   const [view, setView] = useState('aerial3d'); // aerial3d | vision | map | street
   const [svStatus, setSvStatus] = useState('idle');
+  const [mapStatus, setMapStatus] = useState('idle');
   // If the live 3D tiles cannot load (offline, quota, billing), fall back to
   // the captured photo plate of the same vantage so the slide never goes dark.
   const [aerialFallback, setAerialFallback] = useState(false);
@@ -236,6 +239,11 @@ export default function LocationSlide({ mounted, near }) {
   useEffect(() => {
     if (view !== 'map' || mapObj.current) return;
     let dead = false;
+    setMapStatus('loading');
+    const previousAuthFailure = window.gm_authFailure;
+    window.gm_authFailure = () => {
+      if (!dead) setMapStatus('error');
+    };
     loadMaps()
       .then((google) => {
         if (dead || !mapRef.current) return;
@@ -258,10 +266,17 @@ export default function LocationSlide({ mounted, near }) {
           map,
           title: 'Luxe Dream Garage Waterside · Phase 2',
         });
+        setMapStatus('ok');
+        window.setTimeout(() => {
+          if (!dead && mapRef.current?.querySelector('.gm-err-container')) setMapStatus('error');
+        }, 1200);
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!dead) setMapStatus('error');
+      });
     return () => {
       dead = true;
+      window.gm_authFailure = previousAuthFailure;
     };
   }, [view]);
 
@@ -272,12 +287,22 @@ export default function LocationSlide({ mounted, near }) {
     if (view !== 'street' || svInit.current) return;
     svInit.current = true;
     setSvStatus('loading');
+    let dead = false;
+    const previousAuthFailure = window.gm_authFailure;
+    window.gm_authFailure = () => {
+      if (!dead) setSvStatus('none');
+    };
+    const timeout = window.setTimeout(() => {
+      if (!dead) setSvStatus((status) => (status === 'loading' ? 'none' : status));
+    }, 1800);
     const SV_POINT = { lat: 27.3785, lng: -82.4245 };
-    loadMaps().then((google) => {
-      const svService = new google.maps.StreetViewService();
-      svService
-        .getPanorama({ location: SV_POINT, radius: 120, source: google.maps.StreetViewSource.OUTDOOR })
-        .then(({ data }) => {
+    loadMaps()
+      .then((google) => {
+        if (dead) return undefined;
+        const svService = new google.maps.StreetViewService();
+        return svService
+          .getPanorama({ location: SV_POINT, radius: 120, source: google.maps.StreetViewSource.OUTDOOR })
+          .then(({ data }) => {
           const loc = data.location.latLng;
           // Bearing from the pano to the parcel center, so the view opens
           // looking straight at the plot.
@@ -295,9 +320,16 @@ export default function LocationSlide({ mounted, near }) {
             fullscreenControl: false,
           });
           setSvStatus('ok');
-        })
-        .catch(() => setSvStatus('none'));
-    });
+          });
+      })
+      .catch(() => {
+        if (!dead) setSvStatus('none');
+      });
+    return () => {
+      dead = true;
+      window.clearTimeout(timeout);
+      window.gm_authFailure = previousAuthFailure;
+    };
   }, [view]);
 
   const hint =
@@ -315,7 +347,10 @@ export default function LocationSlide({ mounted, near }) {
         <div
           ref={cesiumRef}
           className="loc-canvas loc-cesium"
-          style={{ visibility: view === 'aerial3d' && !aerialFallback ? 'visible' : 'hidden' }}
+          style={{
+            display: aerialFallback ? 'none' : 'block',
+            visibility: view === 'aerial3d' && !aerialFallback ? 'visible' : 'hidden',
+          }}
         />
         {view === 'aerial3d' && (
           <div
@@ -342,9 +377,18 @@ export default function LocationSlide({ mounted, near }) {
         )}
         <div ref={mapRef} className="loc-canvas" style={{ visibility: view === 'map' ? 'visible' : 'hidden' }} />
         <div ref={svRef} className="loc-canvas" style={{ visibility: view === 'street' ? 'visible' : 'hidden' }} />
+        {view === 'map' && mapStatus === 'error' && (
+          <div className="loc-service-fallback">
+            <strong>Open the live parcel map</strong>
+            <span>The embedded map is unavailable in this browser.</span>
+            <a href={MAP_URL} target="_blank" rel="noreferrer">Open Google Maps</a>
+          </div>
+        )}
         {view === 'street' && svStatus === 'none' && (
-          <div className="loc-canvas" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14, padding: '0 18vw', textAlign: 'center' }}>
-            Street View has not been captured right at the parcel yet. Switch back to the 3D aerial to explore the setting.
+          <div className="loc-service-fallback">
+            <strong>Open the Professional Parkway frontage</strong>
+            <span>Street View is unavailable in this browser.</span>
+            <a href={STREET_URL} target="_blank" rel="noreferrer">Open Google Street View</a>
           </div>
         )}
         <div className="loc-shade" />

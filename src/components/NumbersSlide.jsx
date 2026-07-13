@@ -28,7 +28,7 @@ function CashFlowChart({ flows }) {
   const fmt = (v) => (Math.abs(v) >= 1000 ? `${Math.round(v / 1000)}k` : v);
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="cf-chart" role="img" aria-label="Projected annual cash flow">
-      <line x1={pad} y1={zero} x2={w - pad} y2={zero} stroke="#c9c2b4" strokeWidth="1" />
+      <line x1={pad} y1={zero} x2={w - pad} y2={zero} stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
       {flows.map((v, i) => {
         const bh = Math.max(2, Math.abs(v) * scale);
         const x = pad + i * barW + 3;
@@ -37,11 +37,11 @@ function CashFlowChart({ flows }) {
           <g key={i}>
             <rect x={x} y={y} width={barW - 6} height={bh} rx="2"
               fill={v >= 0 ? '#1e7d4f' : '#b3452e'} fillOpacity="0.85" />
-            <text x={x + (barW - 6) / 2} y={h - 6} fontSize="10" textAnchor="middle" fill="#6d675e">
+            <text x={x + (barW - 6) / 2} y={h - 6} fontSize="10" textAnchor="middle" fill="rgba(255,255,255,0.6)">
               {i === 0 ? 'Buy' : `Y${i}`}
             </text>
             <text x={x + (barW - 6) / 2} y={v >= 0 ? y - 4 : y + bh + 11} fontSize="8.5"
-              textAnchor="middle" fill="#6d675e">{fmt(v)}</text>
+              textAnchor="middle" fill="rgba(255,255,255,0.6)">{fmt(v)}</text>
           </g>
         );
       })}
@@ -89,7 +89,7 @@ export default function NumbersSlide() {
   }, [calcType, years, growth]);
 
   return (
-    <div className="slide-light slide-numbers" style={{ position: 'absolute', inset: 0 }}>
+    <div className="slide-numbers slide-numbers-dark" style={{ position: 'absolute', inset: 0 }}>
       <div className="slide-pad">
         <div className="slide-head">
           <h2 className="rise">The garage that pays for the next car.</h2>
