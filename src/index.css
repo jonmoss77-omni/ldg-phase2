@@ -290,10 +290,6 @@ button { font-family: inherit; }
   background: #0a0c0b;
 }
 
-.loc-aerial-fallback .psv-container {
-  width: 100%; height: 100%; background: #0a0c0b;
-}
-
 /* Vision static artist impression */
 .loc-vision-img {
   position: absolute; inset: 0; width: 100%; height: 100%;

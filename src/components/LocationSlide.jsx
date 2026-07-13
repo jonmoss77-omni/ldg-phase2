@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { Viewer } from '@photo-sphere-viewer/core';
-import '@photo-sphere-viewer/core/index.css';
 import { GMAPS_KEY as KEY } from '../config';
 import { visionAsset } from '../data/visionPoses';
 
@@ -8,11 +6,10 @@ import { visionAsset } from '../data/visionPoses';
 // than the postal-address geocode (which lands on the neighboring building).
 const SITE = { lat: 27.378, lng: -82.4269 };
 const ADDRESS = '7100 Professional Parkway East, Sarasota, FL 34240';
-// Canonical camera from the approved Round 3 before/after pair. Keeping the
-// live map, instant plate, and Vision image on this exact pose prevents the
-// development from appearing to jump to a different parcel.
-const HOME = { lat: 27.378844, lng: -82.421615, height: 200, heading: 257, pitch: -26 };
-const HOME_STILL = visionAsset('pose3', 'before');
+// Approved Round 4 establishing view from Professional Parkway. This is the
+// camera framing shown in Aerial_View-2.png and must remain the 3D start pose.
+const HOME = { lat: 27.3742, lng: -82.4262, height: 400, heading: 1, pitch: -38 };
+const HOME_STILL = '/assets/aerial-home.jpg';
 const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${SITE.lat},${SITE.lng}`;
 const STREET_URL = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=27.3785,-82.4245&heading=257&pitch=2&fov=80';
 
@@ -43,8 +40,9 @@ export default function LocationSlide({ mounted, near }) {
   const cesiumRef = useRef(null);
   const cesiumViewer = useRef(null);
   const cesiumInit = useRef(false);
-  const fallbackRef = useRef(null);
-  const fallbackViewer = useRef(null);
+  const aliveRef = useRef(true);
+  const revealTimerRef = useRef(null);
+  const safetyTimerRef = useRef(null);
   const mapRef = useRef(null);
   const mapObj = useRef(null);
   const svRef = useRef(null);
@@ -52,10 +50,9 @@ export default function LocationSlide({ mounted, near }) {
   const [view, setView] = useState('aerial3d'); // aerial3d | vision | map | street
   const [svStatus, setSvStatus] = useState('idle');
   const [mapStatus, setMapStatus] = useState('idle');
-  // If the live 3D tiles cannot load (offline, quota, billing), fall back to
-  // the captured photo plate of the same vantage so the slide never goes dark.
+  // If the live 3D tiles cannot load (offline, quota, billing), retain the
+  // captured Google 3D plate behind an explicit service message.
   const [aerialFallback, setAerialFallback] = useState(false);
-  const [fallbackReady, setFallbackReady] = useState(false);
   // True once the tileset has streamed its first full view; until then the
   // HOME_STILL photo covers the canvas so arrival is instant.
   const [liveReady, setLiveReady] = useState(false);
@@ -64,16 +61,15 @@ export default function LocationSlide({ mounted, near }) {
   // warming as soon as the slide is ADJACENT (near), not on first visit, so
   // tiles are typically already streamed when the visitor lands here.
   useEffect(() => {
-    if ((!mounted && !near) || cesiumInit.current || view !== 'aerial3d') return;
+    if ((!mounted && !near) || cesiumInit.current) return;
     cesiumInit.current = true;
-    let dead = false;
     const params = new URLSearchParams(window.location.search);
     const captureMode = params.has('capture');
     // Quality ladder override for tuning: ?sse=8|4|2. Production default 4.
     const sse = Number(params.get('sse')) || 4;
     loadCesium()
       .then((Cesium) => {
-        if (dead || !cesiumRef.current) return;
+        if (!aliveRef.current || !cesiumRef.current) return;
         Cesium.GoogleMaps.defaultApiKey = KEY;
         // Google serves hundreds of small tile files per view; the default
         // 6-per-host throttle starves refinement.
@@ -158,14 +154,33 @@ export default function LocationSlide({ mounted, near }) {
           },
         )
           .then((tileset) => {
-            if (dead) {
+            if (!aliveRef.current) {
               tileset.destroy?.();
               return;
             }
+
+            // Register readiness listeners before adding the primitive. The
+            // previous order could miss initialTilesLoaded, leaving the static
+            // loading plate permanently above a fully interactive Cesium map.
+            let revealQueued = false;
+            const revealLiveMap = () => {
+              if (!aliveRef.current) return;
+              setLiveReady(true);
+              viewer.scene.requestRender();
+            };
+            const revealAfterFirstTile = () => {
+              if (revealQueued) return;
+              revealQueued = true;
+              revealTimerRef.current = window.setTimeout(revealLiveMap, 700);
+            };
+            tileset.initialTilesLoaded.addEventListener(revealLiveMap);
+            tileset.tileLoad.addEventListener(revealAfterFirstTile);
             viewer.scene.primitives.add(tileset);
-            tileset.initialTilesLoaded.addEventListener(() => {
-              if (!dead) setLiveReady(true);
-            });
+            viewer.scene.requestRender();
+            // Defensive release only after Google has accepted the tileset.
+            // It prevents a missed Cesium event from ever turning the live map
+            // back into what looks like a fixed photograph.
+            safetyTimerRef.current = window.setTimeout(revealLiveMap, 4500);
             if (captureMode) {
               // Dev-only capture harness for the Vision before-plates.
               // Drive from the console/preview_eval; posts PNG + camera JSON
@@ -219,19 +234,19 @@ export default function LocationSlide({ mounted, near }) {
             }
           })
           .catch(() => {
-            if (!dead) setAerialFallback(true);
+            if (aliveRef.current) setAerialFallback(true);
           });
       })
       .catch(() => {
-        if (!dead) setAerialFallback(true);
+        if (aliveRef.current) setAerialFallback(true);
       });
-    return () => {
-      dead = true;
-    };
-  }, [mounted, near, view]);
+  }, [mounted, near]);
 
   useEffect(
     () => () => {
+      aliveRef.current = false;
+      window.clearTimeout(revealTimerRef.current);
+      window.clearTimeout(safetyTimerRef.current);
       if (cesiumViewer.current) {
         cesiumViewer.current.destroy();
         cesiumViewer.current = null;
@@ -239,34 +254,6 @@ export default function LocationSlide({ mounted, near }) {
     },
     [],
   );
-
-  // A rejected API referrer, lost connection, or exhausted tile quota should
-  // not turn the primary control into a dead photograph. In that case, keep
-  // the same drag-and-zoom interaction with the real-site aerial panorama.
-  // Production still uses Google's live photorealistic 3D whenever available.
-  useEffect(() => {
-    if (!aerialFallback || view !== 'aerial3d' || fallbackViewer.current || !fallbackRef.current) return;
-    const viewer = new Viewer({
-      container: fallbackRef.current,
-      navbar: ['zoom'],
-      defaultZoomLvl: 10,
-      mousewheel: true,
-      touchmoveTwoFingers: false,
-    });
-    fallbackViewer.current = viewer;
-    viewer
-      .setPanorama('/assets/pano/loc-today.jpg', {
-        transition: false,
-        position: { yaw: 0, pitch: -0.22 },
-      })
-      .then(() => setFallbackReady(true))
-      .catch(() => setFallbackReady(false));
-    return () => {
-      viewer.destroy();
-      fallbackViewer.current = null;
-      setFallbackReady(false);
-    };
-  }, [aerialFallback, view]);
 
   // Secondary satellite map, lazy init
   useEffect(() => {
@@ -367,9 +354,7 @@ export default function LocationSlide({ mounted, near }) {
 
   const hint =
     view === 'aerial3d'
-      ? aerialFallback
-        ? 'Drag to look around · scroll to zoom · interactive aerial fallback of the parcel today'
-        : 'Drag to explore · scroll to zoom · real Google photorealistic 3D imagery of the parcel today'
+      ? 'Drag to explore · scroll to zoom · real Google photorealistic 3D imagery of the parcel today'
       : view === 'vision'
         ? 'The completed campus · artist impression rendered onto the real aerial photograph from the same viewpoint'
         : view === 'map'
@@ -387,13 +372,10 @@ export default function LocationSlide({ mounted, near }) {
             visibility: view === 'aerial3d' && !aerialFallback ? 'visible' : 'hidden',
           }}
         />
-        {view === 'aerial3d' && aerialFallback && (
-          <div ref={fallbackRef} className="loc-canvas loc-aerial-fallback" />
-        )}
         {view === 'aerial3d' && (
           <div
             className="loc-canvas loc-still"
-            style={{ opacity: aerialFallback ? (fallbackReady ? 0 : 1) : (liveReady ? 0 : 1) }}
+            style={{ opacity: aerialFallback || !liveReady ? 1 : 0 }}
           >
             <img
               className="loc-vision-img"
@@ -422,6 +404,13 @@ export default function LocationSlide({ mounted, near }) {
             <a href={MAP_URL} target="_blank" rel="noreferrer">Open Google Maps</a>
           </div>
         )}
+        {view === 'aerial3d' && aerialFallback && (
+          <div className="loc-service-fallback">
+            <strong>Live Google 3D is unavailable on this preview</strong>
+            <span>The Google key must authorize this web address before the official tiles can load.</span>
+            <a href="https://ldg-phase2.vercel.app/#location" target="_blank" rel="noreferrer">Open the hosted 3D view</a>
+          </div>
+        )}
         {view === 'street' && svStatus === 'none' && (
           <div className="loc-service-fallback">
             <strong>Open the Professional Parkway frontage</strong>
@@ -436,9 +425,10 @@ export default function LocationSlide({ mounted, near }) {
         <h2 className="rise">East of Sarasota, right where you&rsquo;d want it.</h2>
         <div className="loc-rule rise d1" />
         <p className="rise d1">
-          {aerialFallback
-            ? 'Explore the Phase 2 parcel and its Waterside surroundings, then flip to The Vision to see the completed campus that will rise on this exact site.'
-            : 'You are looking at the real Phase 2 parcel in the Waterside corridor, rendered in Google’s photorealistic 3D. Explore the neighborhood as it stands today, then flip to The Vision to see the completed campus that will rise on this exact site.'}
+          You are looking at the real Phase 2 parcel in the Waterside corridor,
+          rendered in Google&rsquo;s photorealistic 3D. Explore the neighborhood
+          as it stands today, then flip to The Vision to see the completed
+          campus that will rise on this exact site.
         </p>
         <p className="loc-address rise d2">{ADDRESS}</p>
       </div>
@@ -446,7 +436,7 @@ export default function LocationSlide({ mounted, near }) {
       <div className="loc-controls">
         <div className="pill-group">
           <button className={view === 'aerial3d' ? 'pill active' : 'pill'} onClick={() => setView('aerial3d')}>
-            {aerialFallback ? 'Aerial 360' : '3D Aerial'}
+            3D Aerial
           </button>
           <button className={view === 'vision' ? 'pill active' : 'pill'} onClick={() => setView('vision')}>
             The Vision
