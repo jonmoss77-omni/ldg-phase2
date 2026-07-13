@@ -8,7 +8,7 @@ const SITE = { lat: 27.378, lng: -82.4269 };
 const ADDRESS = '7100 Professional Parkway East, Sarasota, FL 34240';
 // Approved Round 4 establishing view from Professional Parkway. This is the
 // camera framing shown in Aerial_View-2.png and must remain the 3D start pose.
-const HOME = { lat: 27.3742, lng: -82.4262, height: 400, heading: 1, pitch: -38 };
+const HOME = { lat: 27.3742, lng: -82.4262, height: 400, heading: 91, pitch: -38 };
 const HOME_STILL = '/assets/aerial-home.jpg';
 const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${SITE.lat},${SITE.lng}`;
 const STREET_URL = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=27.3785,-82.4245&heading=257&pitch=2&fov=80';
@@ -45,6 +45,7 @@ export default function LocationSlide({ mounted, near }) {
   const safetyTimerRef = useRef(null);
   const mapRef = useRef(null);
   const mapObj = useRef(null);
+  const mapReadyRef = useRef(false);
   const svRef = useRef(null);
   const svInit = useRef(false);
   const [view, setView] = useState('aerial3d'); // aerial3d | vision | map | street
@@ -257,7 +258,19 @@ export default function LocationSlide({ mounted, near }) {
 
   // Secondary satellite map, lazy init
   useEffect(() => {
-    if (view !== 'map' || mapObj.current) return;
+    if (view !== 'map') return;
+
+    // Google Maps can be hidden while another Location mode is active. Make
+    // it recalculate its viewport each time it becomes visible again.
+    if (mapObj.current) {
+      window.requestAnimationFrame(() => {
+        window.google?.maps?.event?.trigger(mapObj.current, 'resize');
+        mapObj.current.setCenter(SITE);
+        if (mapReadyRef.current) setMapStatus('ok');
+      });
+      return;
+    }
+
     let dead = false;
     setMapStatus('loading');
     const previousAuthFailure = window.gm_authFailure;
@@ -286,10 +299,15 @@ export default function LocationSlide({ mounted, near }) {
           map,
           title: 'Luxe Dream Garage Waterside · Phase 2',
         });
-        setMapStatus('ok');
-        window.setTimeout(() => {
-          if (!dead && mapRef.current?.querySelector('.gm-err-container')) setMapStatus('error');
-        }, 1200);
+        // Do not infer an API failure from Google's transient loading DOM.
+        // The old 1.2 second probe produced a false error before the first
+        // satellite tiles arrived. The map's idle event is the reliable ready
+        // signal; gm_authFailure below remains the genuine auth-error path.
+        google.maps.event.addListenerOnce(map, 'idle', () => {
+          if (dead) return;
+          mapReadyRef.current = true;
+          setMapStatus('ok');
+        });
       })
       .catch(() => {
         if (!dead) setMapStatus('error');
@@ -397,6 +415,12 @@ export default function LocationSlide({ mounted, near }) {
         )}
         <div ref={mapRef} className="loc-canvas" style={{ visibility: view === 'map' ? 'visible' : 'hidden' }} />
         <div ref={svRef} className="loc-canvas" style={{ visibility: view === 'street' ? 'visible' : 'hidden' }} />
+        {view === 'map' && mapStatus === 'loading' && (
+          <div className="loc-map-loading" role="status">
+            <span />
+            Loading the live parcel map
+          </div>
+        )}
         {view === 'map' && mapStatus === 'error' && (
           <div className="loc-service-fallback">
             <strong>Open the live parcel map</strong>

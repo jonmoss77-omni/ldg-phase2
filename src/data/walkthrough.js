@@ -73,7 +73,7 @@ export const NODES = {
     key: 'signature',
     title: 'Signature · 28’ x 60’',
     caption: 'Two levels, six vehicles, and a mezzanine made for late nights.',
-    pano: '/assets/pano/signature.jpg',
+    pano: '/assets/pano/signature-v2.jpg',
     links: [{ to: 'driveSouth', label: 'Back to the drive', kind: 'back', yaw: 0.25, pitch: -0.1 }],
   },
   deluxe: {

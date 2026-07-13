@@ -1,0 +1,25 @@
+Use case: sketch-to-render
+Asset type: production photorealistic equirectangular 360 interior panorama for the Luxe Dream Garage Waterside investor presentation
+
+Input image roles:
+- The geometry panorama is the absolute authority for the 2:1 equirectangular projection, camera, 28 ft by 60 ft by 22 ft shell, wall positions, garage opening, rear mezzanine, pedestrian-door location, and floating-stair geometry.
+- The Signature side view is the authoritative Signature garage condo layout and depth reference.
+- Unit 37 images are fit-out and open-riser floating-stair references only. Their brick walls, sports equipment, machinery, vehicle positions, and clutter are not copied.
+
+Primary request:
+Finish the geometry as a bright, photorealistic completed-development artist impression of a Signature garage condo. Preserve the exact 360 x 180 equirectangular projection and camera position at 5 ft 6 in eye height, approximately 8 ft inside the garage door.
+
+Architecture:
+Maintain a 28 ft wide, 60 ft deep, 22 ft high shell. Maintain the 12 ft wide by 14 ft high garage door, 12 ft mezzanine floor level, 10 ft 6 in clearance below, and 28 ft deep rear mezzanine. Show a normal-height pedestrian door inside the timber-clad bay beside the garage door. Preserve the open-riser cantilever floating staircase with thin individual dark treads and open air between the treads. No heavy solid stair block or closed risers.
+
+Vehicle placement:
+Show exactly two correctly scaled premium collector cars, one silver grand touring coupe and one deep charcoal sports coupe. Place them side by side, centered across the garage width, in the rear third with their rear portions partly beneath the mezzanine. Keep the nearest part of either vehicle at least 24 ft from the camera. Leave generous clear floor around the camera and maintain circulation to the pedestrian door and stair.
+
+Finish and lighting:
+Bright, even natural daylight with balanced warm-white architectural lighting. Smooth warm-white walls, lightly polished warm-gray concrete floor, matte charcoal steel mezzanine and stair, slim clear glass guardrail, restrained warm walnut panels, and a compact dark hospitality cabinet beneath the mezzanine. Architectural Digest and Robb Report editorial realism. Premium and calm, not theatrical.
+
+Projection and seam:
+True seamless 2:1 equirectangular 360 x 180 panorama. Left and right edges show matching halves of the same matte-charcoal garage door and join without a visible seam. Keep vehicles and architectural edges away from the wrap.
+
+Hard constraints:
+Do not alter the shell geometry, add lifts, motorcycles, people, workshop machinery, sports equipment, signage, logos, unit numbers, construction activity, dramatic lighting, wet flooring, excessive reflections, black borders, watermark, visible panorama seam, or any vehicle close to the camera.

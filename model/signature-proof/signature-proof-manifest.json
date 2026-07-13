@@ -1,0 +1,31 @@
+{
+  "status": "Signature interior geometry proof, not final architecture",
+  "selected_type": "Signature garage condo",
+  "confirmed": {
+    "shell_ft": [
+      28.0,
+      60.0,
+      22.0
+    ],
+    "garage_door_width_ft": 12.0,
+    "garage_door_height_ft": 14.0,
+    "mezzanine_floor_height_ft": 12.0,
+    "mezzanine_clearance_ft": 10.5,
+    "mezzanine_depth_ft": 28.0
+  },
+  "next_pass_direction": {
+    "vehicles": "two cars centered side by side toward the rear, partly beneath the mezzanine",
+    "pedestrian_door": "explicit door within the timber facade bay",
+    "stair": "open-riser cantilevered floating stair study"
+  },
+  "provisional": {
+    "pedestrian_door_width_ft": 3.5,
+    "stair_run_and_structure": "visual study pending architect section",
+    "hospitality_fit_out_and_finishes": "artist impression only"
+  },
+  "sources": [
+    "assets/Phase 2 Unit Floor Plans/Signature Unit Side view.jpg",
+    "assets/Unit Images & Renderings/Signature_Unit.jpg",
+    "Jon Moss dimensions confirmed July 2026"
+  ]
+}
