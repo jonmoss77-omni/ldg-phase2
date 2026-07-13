@@ -9,6 +9,7 @@ const faceName = params.get('face') || 'nz';
 const size = Math.max(512, Math.min(2048, Number(params.get('size')) || 1024));
 
 const nodes = {
+  aerial: new THREE.Vector3(0, 130, 600),
   south: new THREE.Vector3(-95, 7.2, -40),
   mid: new THREE.Vector3(-95, 7.2, -80),
   north: new THREE.Vector3(-95, 7.2, -330),

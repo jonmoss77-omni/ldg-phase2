@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { Viewer } from '@photo-sphere-viewer/core';
+import '@photo-sphere-viewer/core/index.css';
 import { GMAPS_KEY as KEY } from '../config';
 import { visionAsset } from '../data/visionPoses';
 
@@ -41,6 +43,8 @@ export default function LocationSlide({ mounted, near }) {
   const cesiumRef = useRef(null);
   const cesiumViewer = useRef(null);
   const cesiumInit = useRef(false);
+  const fallbackRef = useRef(null);
+  const fallbackViewer = useRef(null);
   const mapRef = useRef(null);
   const mapObj = useRef(null);
   const svRef = useRef(null);
@@ -51,6 +55,7 @@ export default function LocationSlide({ mounted, near }) {
   // If the live 3D tiles cannot load (offline, quota, billing), fall back to
   // the captured photo plate of the same vantage so the slide never goes dark.
   const [aerialFallback, setAerialFallback] = useState(false);
+  const [fallbackReady, setFallbackReady] = useState(false);
   // True once the tileset has streamed its first full view; until then the
   // HOME_STILL photo covers the canvas so arrival is instant.
   const [liveReady, setLiveReady] = useState(false);
@@ -235,6 +240,34 @@ export default function LocationSlide({ mounted, near }) {
     [],
   );
 
+  // A rejected API referrer, lost connection, or exhausted tile quota should
+  // not turn the primary control into a dead photograph. In that case, keep
+  // the same drag-and-zoom interaction with the real-site aerial panorama.
+  // Production still uses Google's live photorealistic 3D whenever available.
+  useEffect(() => {
+    if (!aerialFallback || view !== 'aerial3d' || fallbackViewer.current || !fallbackRef.current) return;
+    const viewer = new Viewer({
+      container: fallbackRef.current,
+      navbar: ['zoom'],
+      defaultZoomLvl: 10,
+      mousewheel: true,
+      touchmoveTwoFingers: false,
+    });
+    fallbackViewer.current = viewer;
+    viewer
+      .setPanorama('/assets/pano/loc-today.jpg', {
+        transition: false,
+        position: { yaw: 0, pitch: -0.22 },
+      })
+      .then(() => setFallbackReady(true))
+      .catch(() => setFallbackReady(false));
+    return () => {
+      viewer.destroy();
+      fallbackViewer.current = null;
+      setFallbackReady(false);
+    };
+  }, [aerialFallback, view]);
+
   // Secondary satellite map, lazy init
   useEffect(() => {
     if (view !== 'map' || mapObj.current) return;
@@ -334,7 +367,9 @@ export default function LocationSlide({ mounted, near }) {
 
   const hint =
     view === 'aerial3d'
-      ? 'Drag to explore · scroll to zoom · real Google photorealistic 3D imagery of the parcel today'
+      ? aerialFallback
+        ? 'Drag to look around · scroll to zoom · interactive aerial fallback of the parcel today'
+        : 'Drag to explore · scroll to zoom · real Google photorealistic 3D imagery of the parcel today'
       : view === 'vision'
         ? 'The completed campus · artist impression rendered onto the real aerial photograph from the same viewpoint'
         : view === 'map'
@@ -352,10 +387,13 @@ export default function LocationSlide({ mounted, near }) {
             visibility: view === 'aerial3d' && !aerialFallback ? 'visible' : 'hidden',
           }}
         />
+        {view === 'aerial3d' && aerialFallback && (
+          <div ref={fallbackRef} className="loc-canvas loc-aerial-fallback" />
+        )}
         {view === 'aerial3d' && (
           <div
             className="loc-canvas loc-still"
-            style={{ opacity: aerialFallback || !liveReady ? 1 : 0 }}
+            style={{ opacity: aerialFallback ? (fallbackReady ? 0 : 1) : (liveReady ? 0 : 1) }}
           >
             <img
               className="loc-vision-img"
@@ -398,10 +436,9 @@ export default function LocationSlide({ mounted, near }) {
         <h2 className="rise">East of Sarasota, right where you&rsquo;d want it.</h2>
         <div className="loc-rule rise d1" />
         <p className="rise d1">
-          You are looking at the real Phase 2 parcel in the Waterside corridor,
-          rendered in Google&rsquo;s photorealistic 3D. Explore the neighborhood
-          as it stands today, then flip to The Vision to see the completed
-          campus that will rise on this exact site.
+          {aerialFallback
+            ? 'Explore the Phase 2 parcel and its Waterside surroundings, then flip to The Vision to see the completed campus that will rise on this exact site.'
+            : 'You are looking at the real Phase 2 parcel in the Waterside corridor, rendered in Google’s photorealistic 3D. Explore the neighborhood as it stands today, then flip to The Vision to see the completed campus that will rise on this exact site.'}
         </p>
         <p className="loc-address rise d2">{ADDRESS}</p>
       </div>
@@ -409,7 +446,7 @@ export default function LocationSlide({ mounted, near }) {
       <div className="loc-controls">
         <div className="pill-group">
           <button className={view === 'aerial3d' ? 'pill active' : 'pill'} onClick={() => setView('aerial3d')}>
-            3D Aerial
+            {aerialFallback ? 'Aerial 360' : '3D Aerial'}
           </button>
           <button className={view === 'vision' ? 'pill active' : 'pill'} onClick={() => setView('vision')}>
             The Vision

@@ -4,6 +4,32 @@
   "dimensions_px": [4096, 2048],
   "source_geometry": "../ldg-phase2-detailed-rows.obj",
   "nodes": {
+    "aerial": {
+      "world_position_ft": [0, 130, 600],
+      "file": "aerial-geometry.png",
+      "photoreal_candidate": {
+        "file": "aerial-photoreal-higgsfield-v3-seam8.jpg",
+        "buyer_walkthrough_file": "../../../public/assets/pano/aerial.jpg",
+        "higgsfield_job_id": "19c9c92e-178f-453b-b3c7-3b0c414e7c40",
+        "model": "gpt_image_2",
+        "requested_output": "4K, high quality, 16:9",
+        "downloaded_dimensions_px": [3840, 2160],
+        "walkthrough_dimensions_px": [4096, 2048],
+        "wrap_edge_mean_absolute_error_before_heal": {
+          "1px_band": 14.629,
+          "8px_band": 13.381
+        },
+        "wrap_edge_mean_absolute_error_after_8px_heal": {
+          "1px_band": 1.607,
+          "8px_band": 6.842
+        },
+        "rejected_jobs": {
+          "dfab83c7-6a75-4456-8a69-6b87cb18ae1b": "three long unit rows instead of four",
+          "f0d6dba3-3e64-41af-aa8f-bb356afd1e9e": "five long unit rows instead of four"
+        },
+        "validation": "passed desktop forward view, drag interaction, visual seam crossing, Descend to arrival route, and 390 x 844 responsive buyer view; local only"
+      }
+    },
     "drive-south": {
       "world_position_ft": [-95, 7.2, -40],
       "file": "drive-south-geometry.jpg",

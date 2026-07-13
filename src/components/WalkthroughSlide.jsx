@@ -67,7 +67,10 @@ export default function WalkthroughSlide({ mounted }) {
     const first = !viewer.state?.textureData;
     const swap = () =>
       viewer
-        .setPanorama(def.pano, { transition: false, position: { yaw: faceYawRef.current, pitch: 0 } })
+        .setPanorama(def.pano, {
+          transition: false,
+          position: { yaw: faceYawRef.current, pitch: def.initialPitch ?? 0 },
+        })
         .then(() => {
           if (dead) return;
           markers.clearMarkers();

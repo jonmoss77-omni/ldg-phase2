@@ -10,6 +10,7 @@ export const NODES = {
     title: 'Above Waterside',
     caption: 'Seventy-five garage condos behind one private gate. Pick your rooftop.',
     pano: '/assets/pano/aerial.jpg',
+    initialPitch: -0.28,
     links: [
       { to: 'arrival', label: 'Descend to arrival', kind: 'move', yaw: 0, pitch: -0.5 },
     ],
