@@ -9,8 +9,8 @@ export const NODES = {
     key: 'aerial',
     title: 'Above Waterside',
     caption: 'Seventy-five garage condos behind one private gate. Pick your rooftop.',
-    pano: '/assets/pano/aerial.jpg',
-    initialPitch: -0.28,
+    mode: 'still',
+    still: '/assets/walkthrough-aerial-still.jpg',
     links: [
       { to: 'arrival', label: 'Descend to arrival', kind: 'move', yaw: 0, pitch: -0.5 },
     ],
@@ -73,7 +73,7 @@ export const NODES = {
     key: 'signature',
     title: 'Signature · 28’ x 60’',
     caption: 'Two levels, six vehicles, and a mezzanine made for late nights.',
-    pano: '/assets/pano/signature-v2.jpg',
+    pano: '/assets/pano/signature-v3.jpg',
     links: [{ to: 'driveSouth', label: 'Back to the drive', kind: 'back', yaw: 0.25, pitch: -0.1 }],
   },
   deluxe: {

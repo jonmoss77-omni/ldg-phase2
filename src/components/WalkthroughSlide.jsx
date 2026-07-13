@@ -63,6 +63,11 @@ export default function WalkthroughSlide({ mounted }) {
     const markers = markersRef.current;
     if (!ready || !viewer || !markers) return;
     const def = NODES[node];
+    if (def.mode === 'still') {
+      markers.clearMarkers();
+      setFading(false);
+      return;
+    }
     let dead = false;
     const first = !viewer.state?.textureData;
     const swap = () =>
@@ -101,7 +106,16 @@ export default function WalkthroughSlide({ mounted }) {
   return (
     <div className="slide-walkthrough" style={{ position: 'absolute', inset: 0 }}>
       <div className="wt-stage">
-        <div ref={mountRef} className="wt-mount" />
+        <div ref={mountRef} className={def.mode === 'still' ? 'wt-mount hidden' : 'wt-mount'} />
+        {def.mode === 'still' && (
+          <div className="wt-still">
+            <img src={def.still} alt="Artist impression of the completed Phase 2 campus from above" />
+            <button className="wt-still-link" onClick={() => goTo(def.links[0].to)}>
+              <span>↓</span>
+              {def.links[0].label}
+            </button>
+          </div>
+        )}
         <div className={fading ? 'wt-fade on' : 'wt-fade'} />
       </div>
 
@@ -123,8 +137,9 @@ export default function WalkthroughSlide({ mounted }) {
       </div>
 
       <p className="footnote wt-footnote">
-        Drag to look around · click the arrows to walk the site · all views are
-        artist impressions of the completed Phase 2
+        {def.mode === 'still'
+          ? 'Locked establishing view · continue below to enter the walkthrough · artist impression of the completed Phase 2'
+          : 'Drag to look around · click the arrows to walk the site · all views are artist impressions of the completed Phase 2'}
       </p>
     </div>
   );

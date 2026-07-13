@@ -6,25 +6,26 @@ import { visionAsset } from '../data/visionPoses';
 // than the postal-address geocode (which lands on the neighboring building).
 const SITE = { lat: 27.378, lng: -82.4269 };
 const ADDRESS = '7100 Professional Parkway East, Sarasota, FL 34240';
-// Approved Round 4 establishing view from Professional Parkway. This is the
-// camera framing shown in Aerial_View-2.png and must remain the 3D start pose.
-const HOME = { lat: 27.3742, lng: -82.4262, height: 400, heading: 91, pitch: -38 };
+// Keep the parcel as the fixed target when the establishing view is rotated.
+// The previous pass changed only the heading, which turned the camera away
+// from the site. This pose derives the camera position from the target,
+// heading, height and pitch, so future orientation changes cannot lose it.
+const HOME = { height: 400, heading: 91, pitch: -38 };
 const HOME_STILL = '/assets/aerial-home.jpg';
-const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${SITE.lat},${SITE.lng}`;
-const STREET_URL = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=27.3785,-82.4245&heading=257&pitch=2&fov=80';
+const MAP_EMBED = `https://maps.google.com/maps?q=${SITE.lat},${SITE.lng}&t=k&z=17&output=embed`;
+const STREET_EMBED = 'https://maps.google.com/maps?q=&layer=c&cbll=27.37873902637183,-82.42408625227013&cbp=11,257,0,0,0&output=svembed';
 
-let mapsPromise = null;
-function loadMaps() {
-  if (mapsPromise) return mapsPromise;
-  mapsPromise = new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${KEY}&v=weekly&loading=async`;
-    s.async = true;
-    s.onload = () => resolve(window.google);
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-  return mapsPromise;
+function homeCameraPosition() {
+  const heading = (HOME.heading * Math.PI) / 180;
+  const pitch = (Math.abs(HOME.pitch) * Math.PI) / 180;
+  const range = HOME.height / Math.tan(pitch);
+  const backBearing = heading + Math.PI;
+  const metersPerDegreeLat = 111_320;
+  const metersPerDegreeLng = metersPerDegreeLat * Math.cos((SITE.lat * Math.PI) / 180);
+  return {
+    lat: SITE.lat + (Math.cos(backBearing) * range) / metersPerDegreeLat,
+    lng: SITE.lng + (Math.sin(backBearing) * range) / metersPerDegreeLng,
+  };
 }
 
 // Cesium is a heavy dependency (multi-MB). Load it only when the Location
@@ -43,14 +44,7 @@ export default function LocationSlide({ mounted, near }) {
   const aliveRef = useRef(true);
   const revealTimerRef = useRef(null);
   const safetyTimerRef = useRef(null);
-  const mapRef = useRef(null);
-  const mapObj = useRef(null);
-  const mapReadyRef = useRef(false);
-  const svRef = useRef(null);
-  const svInit = useRef(false);
   const [view, setView] = useState('aerial3d'); // aerial3d | vision | map | street
-  const [svStatus, setSvStatus] = useState('idle');
-  const [mapStatus, setMapStatus] = useState('idle');
   // If the live 3D tiles cannot load (offline, quota, billing), retain the
   // captured Google 3D plate behind an explicit service message.
   const [aerialFallback, setAerialFallback] = useState(false);
@@ -134,8 +128,9 @@ export default function LocationSlide({ mounted, near }) {
           viewer.scene.requestRender();
         });
 
+        const home = homeCameraPosition();
         viewer.scene.camera.setView({
-          destination: Cesium.Cartesian3.fromDegrees(HOME.lng, HOME.lat, HOME.height),
+          destination: Cesium.Cartesian3.fromDegrees(home.lng, home.lat, HOME.height),
           orientation: {
             heading: Cesium.Math.toRadians(HOME.heading),
             pitch: Cesium.Math.toRadians(HOME.pitch),
@@ -256,120 +251,6 @@ export default function LocationSlide({ mounted, near }) {
     [],
   );
 
-  // Secondary satellite map, lazy init
-  useEffect(() => {
-    if (view !== 'map') return;
-
-    // Google Maps can be hidden while another Location mode is active. Make
-    // it recalculate its viewport each time it becomes visible again.
-    if (mapObj.current) {
-      window.requestAnimationFrame(() => {
-        window.google?.maps?.event?.trigger(mapObj.current, 'resize');
-        mapObj.current.setCenter(SITE);
-        if (mapReadyRef.current) setMapStatus('ok');
-      });
-      return;
-    }
-
-    let dead = false;
-    setMapStatus('loading');
-    const previousAuthFailure = window.gm_authFailure;
-    window.gm_authFailure = () => {
-      if (!dead) setMapStatus('error');
-    };
-    loadMaps()
-      .then((google) => {
-        if (dead || !mapRef.current) return;
-        const map = new google.maps.Map(mapRef.current, {
-          center: SITE,
-          zoom: 16,
-          mapTypeId: 'satellite',
-          tilt: 45,
-          gestureHandling: 'greedy',
-          zoomControl: true,
-          rotateControl: true,
-          streetViewControl: false,
-          fullscreenControl: false,
-          mapTypeControl: false,
-          keyboardShortcuts: false,
-        });
-        mapObj.current = map;
-        new google.maps.Marker({
-          position: SITE,
-          map,
-          title: 'Luxe Dream Garage Waterside · Phase 2',
-        });
-        // Do not infer an API failure from Google's transient loading DOM.
-        // The old 1.2 second probe produced a false error before the first
-        // satellite tiles arrived. The map's idle event is the reliable ready
-        // signal; gm_authFailure below remains the genuine auth-error path.
-        google.maps.event.addListenerOnce(map, 'idle', () => {
-          if (dead) return;
-          mapReadyRef.current = true;
-          setMapStatus('ok');
-        });
-      })
-      .catch(() => {
-        if (!dead) setMapStatus('error');
-      });
-    return () => {
-      dead = true;
-      window.gm_authFailure = previousAuthFailure;
-    };
-  }, [view]);
-
-  // Street view, lazy init. Anchor the pano to Professional Parkway at the
-  // parcel frontage (a radius search from the parcel center lands on the
-  // Delainey Ct cul-de-sac instead), then face the camera at the site.
-  useEffect(() => {
-    if (view !== 'street' || svInit.current) return;
-    svInit.current = true;
-    setSvStatus('loading');
-    let dead = false;
-    const previousAuthFailure = window.gm_authFailure;
-    window.gm_authFailure = () => {
-      if (!dead) setSvStatus('none');
-    };
-    const timeout = window.setTimeout(() => {
-      if (!dead) setSvStatus((status) => (status === 'loading' ? 'none' : status));
-    }, 1800);
-    const SV_POINT = { lat: 27.3785, lng: -82.4245 };
-    loadMaps()
-      .then((google) => {
-        if (dead) return undefined;
-        const svService = new google.maps.StreetViewService();
-        return svService
-          .getPanorama({ location: SV_POINT, radius: 120, source: google.maps.StreetViewSource.OUTDOOR })
-          .then(({ data }) => {
-          const loc = data.location.latLng;
-          // Bearing from the pano to the parcel center, so the view opens
-          // looking straight at the plot.
-          const toRad = (d) => (d * Math.PI) / 180;
-          const dLng = toRad(SITE.lng - loc.lng());
-          const y = Math.sin(dLng) * Math.cos(toRad(SITE.lat));
-          const x =
-            Math.cos(toRad(loc.lat())) * Math.sin(toRad(SITE.lat)) -
-            Math.sin(toRad(loc.lat())) * Math.cos(toRad(SITE.lat)) * Math.cos(dLng);
-          const heading = (Math.atan2(y, x) * 180) / Math.PI;
-          new google.maps.StreetViewPanorama(svRef.current, {
-            pano: data.location.pano,
-            pov: { heading, pitch: 2 },
-            addressControl: false,
-            fullscreenControl: false,
-          });
-          setSvStatus('ok');
-          });
-      })
-      .catch(() => {
-        if (!dead) setSvStatus('none');
-      });
-    return () => {
-      dead = true;
-      window.clearTimeout(timeout);
-      window.gm_authFailure = previousAuthFailure;
-    };
-  }, [view]);
-
   const hint =
     view === 'aerial3d'
       ? 'Drag to explore · scroll to zoom · real Google photorealistic 3D imagery of the parcel today'
@@ -413,33 +294,31 @@ export default function LocationSlide({ mounted, near }) {
             />
           </div>
         )}
-        <div ref={mapRef} className="loc-canvas" style={{ visibility: view === 'map' ? 'visible' : 'hidden' }} />
-        <div ref={svRef} className="loc-canvas" style={{ visibility: view === 'street' ? 'visible' : 'hidden' }} />
-        {view === 'map' && mapStatus === 'loading' && (
-          <div className="loc-map-loading" role="status">
-            <span />
-            Loading the live parcel map
-          </div>
+        {view === 'map' && (
+          <iframe
+            className="loc-canvas loc-google-frame"
+            src={MAP_EMBED}
+            title="Interactive Google satellite map of the Phase 2 parcel"
+            loading="eager"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
         )}
-        {view === 'map' && mapStatus === 'error' && (
-          <div className="loc-service-fallback">
-            <strong>Open the live parcel map</strong>
-            <span>The embedded map is unavailable in this browser.</span>
-            <a href={MAP_URL} target="_blank" rel="noreferrer">Open Google Maps</a>
-          </div>
+        {view === 'street' && (
+          <iframe
+            className="loc-canvas loc-google-frame"
+            src={STREET_EMBED}
+            title="Google Street View from Professional Parkway"
+            loading="eager"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
         )}
         {view === 'aerial3d' && aerialFallback && (
           <div className="loc-service-fallback">
             <strong>Live Google 3D is unavailable on this preview</strong>
             <span>The Google key must authorize this web address before the official tiles can load.</span>
             <a href="https://ldg-phase2.vercel.app/#location" target="_blank" rel="noreferrer">Open the hosted 3D view</a>
-          </div>
-        )}
-        {view === 'street' && svStatus === 'none' && (
-          <div className="loc-service-fallback">
-            <strong>Open the Professional Parkway frontage</strong>
-            <span>Street View is unavailable in this browser.</span>
-            <a href={STREET_URL} target="_blank" rel="noreferrer">Open Google Street View</a>
           </div>
         )}
         <div className="loc-shade" />
