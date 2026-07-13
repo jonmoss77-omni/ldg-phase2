@@ -5,24 +5,14 @@
 // 'enter'/'back'/'up' render label pills.
 
 export const NODES = {
-  aerial: {
-    key: 'aerial',
-    title: 'Above Waterside',
-    caption: 'Seventy-five garage condos behind one private gate. Pick your rooftop.',
-    mode: 'still',
-    still: '/assets/walkthrough-aerial-still.jpg',
-    links: [
-      { to: 'arrival', label: 'Descend to arrival', kind: 'move', yaw: 0, pitch: -0.5 },
-    ],
-  },
   arrival: {
     key: 'arrival',
     title: 'Arrival',
     caption: 'Pull up to the Luxe Club. Valet, showroom, and your gate code.',
     pano: '/assets/pano/arrival.jpg',
+    initialYaw: 1.75,
     links: [
       { to: 'gate', label: 'Through the gate', kind: 'move', yaw: 0.9, pitch: -0.12, faceYaw: 3.14 },
-      { to: 'aerial', label: 'See it from above', kind: 'up', yaw: -1.8, pitch: 0.35 },
     ],
   },
   gate: {
@@ -100,7 +90,6 @@ export const NODES = {
 };
 
 export const NODE_ORDER = [
-  'aerial',
   'arrival',
   'gate',
   'driveSouth',
@@ -113,7 +102,6 @@ export const NODE_ORDER = [
 ];
 
 export const NODE_CHIP = {
-  aerial: 'Aerial',
   arrival: 'Arrival',
   gate: 'The Gate',
   driveSouth: 'Drive · S',

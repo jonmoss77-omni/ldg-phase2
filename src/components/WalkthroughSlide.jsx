@@ -18,9 +18,9 @@ export default function WalkthroughSlide({ mounted }) {
   const mountRef = useRef(null);
   const viewerRef = useRef(null);
   const markersRef = useRef(null);
-  const [node, setNode] = useState('aerial');
-  const nodeRef = useRef('aerial');
-  const faceYawRef = useRef(0);
+  const [node, setNode] = useState('arrival');
+  const nodeRef = useRef('arrival');
+  const faceYawRef = useRef(NODES.arrival.initialYaw ?? 0);
   const [fading, setFading] = useState(false);
   const [ready, setReady] = useState(false);
 

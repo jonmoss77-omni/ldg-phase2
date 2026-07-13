@@ -10,7 +10,7 @@ const ADDRESS = '7100 Professional Parkway East, Sarasota, FL 34240';
 // The previous pass changed only the heading, which turned the camera away
 // from the site. This pose derives the camera position from the target,
 // heading, height and pitch, so future orientation changes cannot lose it.
-const HOME = { height: 400, heading: 91, pitch: -38 };
+const HOME = { height: 400, heading: 271, pitch: -38 };
 const HOME_STILL = '/assets/aerial-home.jpg';
 const MAP_EMBED = `https://maps.google.com/maps?q=${SITE.lat},${SITE.lng}&t=k&z=17&output=embed`;
 const STREET_EMBED = 'https://maps.google.com/maps?q=&layer=c&cbll=27.37873902637183,-82.42408625227013&cbp=11,257,0,0,0&output=svembed';
